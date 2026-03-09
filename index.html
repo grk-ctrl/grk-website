@@ -184,6 +184,27 @@ section { padding: 90px 8%; }
 .dept-tab.active, .dept-tab:hover {
   background: var(--navy); color: white; border-color: var(--navy);
 }
+.dept-filter-row {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 36px; flex-wrap: wrap;
+}
+.dept-dropdown-wrap { position: relative; }
+.dept-dropdown {
+  appearance: none; -webkit-appearance: none;
+  padding: 10px 40px 10px 16px;
+  border: 1.5px solid var(--border); border-radius: 6px;
+  font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500;
+  color: var(--navy); background: white; cursor: pointer;
+  min-width: 260px; outline: none; transition: border-color 0.2s;
+}
+.dept-dropdown:focus, .dept-dropdown:hover { border-color: var(--teal); }
+.dept-dropdown-arrow {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  pointer-events: none; color: var(--muted); font-size: 12px;
+}
+.dept-filter-label {
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+}
 .product-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px;
 }
@@ -486,8 +507,31 @@ footer {
     <p class="section-desc" style="max-width:320px">All products fabricated from SS 304 Grade steel. Custom dimensions available on request.</p>
   </div>
 
-  <div class="dept-tabs" id="deptTabs">
-    <div class="dept-tab active" data-dept="all">All</div>
+  <div class="dept-filter-row">
+    <span class="dept-filter-label">Filter by Department:</span>
+    <div class="dept-dropdown-wrap">
+      <select class="dept-dropdown" id="deptDropdown">
+        <option value="all">All Departments</option>
+        <option value="Nursing Service">Nursing Service</option>
+        <option value="General Wards">General Wards</option>
+        <option value="MICU">MICU</option>
+        <option value="ICU & Critical Care">ICU & Critical Care</option>
+        <option value="Operating Theatre (OR)">Operating Theatre (OR)</option>
+        <option value="CSSD & Sterilisation">CSSD & Sterilisation</option>
+        <option value="Cath Lab & Cardiology">Cath Lab & Cardiology</option>
+        <option value="Endoscopy & Scopy">Endoscopy & Scopy</option>
+        <option value="Pharmacy">Pharmacy</option>
+        <option value="Blood Bank">Blood Bank</option>
+        <option value="Haematology">Haematology</option>
+        <option value="Microbiology">Microbiology</option>
+        <option value="Stem Cell Department">Stem Cell Department</option>
+        <option value="Examination Rooms">Examination Rooms</option>
+        <option value="Laundry & Maintenance">Laundry & Maintenance</option>
+        <option value="MRD & Administration">MRD & Administration</option>
+      </select>
+      <span class="dept-dropdown-arrow">▼</span>
+    </div>
+  </div>
     <div class="dept-tab" data-dept="Nursing Service">Nursing</div>
     <div class="dept-tab" data-dept="Operating Theatre (OR)">Operating Theatre</div>
     <div class="dept-tab" data-dept="ICU & Critical Care">ICU</div>
@@ -725,51 +769,115 @@ footer {
 
 <script>
 const products = [
-  // Nursing Service
-  {dept:'Nursing Service', code:'NS-001', name:'Stretcher / Patient Transfer Trolley', material:'SS 304'},
-  {dept:'Nursing Service', code:'NS-002', name:'Dressing Trolley', material:'SS 304'},
-  {dept:'Nursing Service', code:'NS-003', name:'Emergency Trolley', material:'SS 304'},
-  {dept:'Nursing Service', code:'NS-004', name:'Patient Shifting Device', material:'SS'},
-  {dept:'Nursing Service', code:'NS-005', name:'Linen Trolley', material:'SS 304'},
-  {dept:'Nursing Service', code:'NS-006', name:'IV Stand with Basket', material:'SS 304'},
-  {dept:'Nursing Service', code:'NS-007', name:'Instrument Trolley', material:'SS 304'},
-  {dept:'Nursing Service', code:'NS-008', name:'Labour Cot', material:'MS'},
-  // General Wards
-  {dept:'General Wards', code:'GW-001', name:'SS Bed Pan', material:'SS 304'},
-  {dept:'General Wards', code:'GW-002', name:'Basin Stand', material:'SS 304'},
-  {dept:'General Wards', code:'GW-003', name:'Bedside Locker', material:'SS 304'},
-  {dept:'General Wards', code:'GW-004', name:'Foot Stool', material:'SS 304'},
-  {dept:'General Wards', code:'GW-005', name:'Portable Commode', material:'MS'},
-  {dept:'General Wards', code:'GW-006', name:'Sanitizer Dispensing Stand', material:'SS 304'},
-  // OT
-  {dept:'Operating Theatre (OR)', code:'OT-001', name:'OR Patient Transfer Trolley', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-002', name:'Mayo Stand', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-003', name:'Sponge Racks', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-004', name:'Instrument Trolley', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-005', name:'Anaesthesia Trolley', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-006', name:'Monitor Trolley', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-007', name:'Crash Cart Emergency', material:'SS 304'},
-  {dept:'Operating Theatre (OR)', code:'OT-008', name:'Perforated Trays & Baskets', material:'SS 304'},
-  // ICU
-  {dept:'ICU & Critical Care', code:'ICU-001', name:'ICU Accessory Trolley', material:'SS 304'},
-  {dept:'ICU & Critical Care', code:'ICU-002', name:'Defibrillator Trolley', material:'SS 304'},
-  {dept:'ICU & Critical Care', code:'ICU-003', name:'Monitor Stand', material:'SS 304'},
-  {dept:'ICU & Critical Care', code:'ICU-004', name:'BiPAP Stand', material:'SS 304'},
-  // Pharmacy
-  {dept:'Pharmacy', code:'PH-001', name:'Pharmacy Racks', material:'SS 304'},
-  {dept:'Pharmacy', code:'PH-002', name:'Bin Racks', material:'MS'},
-  {dept:'Pharmacy', code:'PH-003', name:'Plastic Bins', material:'Plastic'},
-  {dept:'Pharmacy', code:'PH-004', name:'Instrument / Delivery Trolley', material:'SS 304'},
-  // Blood Bank
-  {dept:'Blood Bank', code:'BB-001', name:'Blood Bank Racks (Freezer)', material:'SS 304'},
-  {dept:'Blood Bank', code:'BB-002', name:'Vacutainer Rack', material:'MS'},
-  {dept:'Blood Bank', code:'BB-003', name:'Blood Bag Tray', material:'SS 304'},
-  {dept:'Blood Bank', code:'BB-004', name:'Blood Transfer Cooler Trolley', material:'SS 304'},
-  // MRD
-  {dept:'MRD & Administration', code:'ADM-001', name:'Revolving Chairs', material:'Metal'},
-  {dept:'MRD & Administration', code:'ADM-002', name:'Individual Lockers / Cupboards', material:'MS'},
-  {dept:'MRD & Administration', code:'ADM-003', name:'Filing Cabinet', material:'MS'},
-  {dept:'MRD & Administration', code:'ADM-004', name:'Perforated Lobby Chairs', material:'Metal'},
+  {dept:'Nursing Service', code:'NS-001', name:"Stretcher / Patient Transfer Trolley", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-002', name:"Emergency Trolley", material:'Mild Steel'},
+  {dept:'Nursing Service', code:'NS-003', name:"Emergency Trolley", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-004', name:"Patient Shifting Device", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-005', name:"Linen Trolley", material:'Stainless Steel'},
+  {dept:'Nursing Service', code:'NS-006', name:"IV Stand with Basket", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-007', name:"Instrument Trolley", material:'Stainless Steel'},
+  {dept:'Nursing Service', code:'NS-008', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-009', name:"Labour Cot", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-010', name:"Labour Instrument Trolley", material:'Stainless Steel'},
+  {dept:'Nursing Service', code:'NS-011', name:"Baby Transfer Cradle Trolley", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-012', name:"Bed Pan & Urinal Stand", material:'SS 304'},
+  {dept:'Nursing Service', code:'NS-013', name:"SS Cradle", material:'Stainless Steel'},
+  {dept:'General Wards', code:'GW-001', name:"Portable Commode", material:'Mild Steel'},
+  {dept:'General Wards', code:'GW-002', name:"Basin Stand", material:'SS 304'},
+  {dept:'General Wards', code:'GW-003', name:"Foot Stool", material:'Stainless Steel'},
+  {dept:'General Wards', code:'GW-004', name:"Sanitizer Stand", material:'Stainless Steel'},
+  {dept:'General Wards', code:'GW-005', name:"Discard Bin", material:'SS 304'},
+  {dept:'General Wards', code:'GW-006', name:"SS Bed Pan", material:'Stainless Steel'},
+  {dept:'General Wards', code:'GW-007', name:"Chair with Wooden Base", material:'SS 304'},
+  {dept:'General Wards', code:'GW-008', name:"Bottle Stand", material:'SS 304'},
+  {dept:'General Wards', code:'GW-009', name:"Hanger Stand", material:'Stainless Steel'},
+  {dept:'MICU', code:'MIC-001', name:"Bedside Table / Locker", material:'Stainless Steel'},
+  {dept:'MICU', code:'MIC-002', name:"Pump Stand", material:'Mild Steel'},
+  {dept:'MICU', code:'MIC-003', name:"Instrument Stand", material:'Stainless Steel'},
+  {dept:'MICU', code:'MIC-004', name:"Chart Rack", material:'SS 304'},
+  {dept:'ICU & Critical Care', code:'ICU-001', name:"ICU Accessory / Equipment Trolley", material:'Stainless Steel'},
+  {dept:'ICU & Critical Care', code:'ICU-002', name:"Monitor Trolley", material:'SS 304'},
+  {dept:'ICU & Critical Care', code:'ICU-003', name:"Defibrillator Trolley", material:'SS 304'},
+  {dept:'ICU & Critical Care', code:'ICU-004', name:"Paediatric ICU Chart Trolley", material:'Stainless Steel'},
+  {dept:'ICU & Critical Care', code:'ICU-005', name:"BiPAP Stand", material:'SS 304'},
+  {dept:'ICU & Critical Care', code:'ICU-006', name:"Hug-U-Vac Mattress Stand", material:'Stainless Steel'},
+  {dept:'ICU & Critical Care', code:'ICU-007', name:"Alpha Motor Stand", material:'Stainless Steel'},
+  {dept:'ICU & Critical Care', code:'ICU-008', name:"ICD Stand", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-001', name:"OR Patient Transfer Trolley", material:'Aluminium'},
+  {dept:'Operating Theatre (OR)', code:'OT-002', name:"Mayo Stand", material:'Stainless Steel'},
+  {dept:'Operating Theatre (OR)', code:'OT-003', name:"Anaesthesia Trolley", material:'Stainless Steel'},
+  {dept:'Operating Theatre (OR)', code:'OT-004', name:"Anaesthesia Trolley", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-005', name:"Monitor Trolley", material:'Stainless Steel'},
+  {dept:'Operating Theatre (OR)', code:'OT-006', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-007', name:"Aluminium Roller / Patient Shifting", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-008', name:"Sponge Racks", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-009', name:"Allen Stirrups Trolley", material:'Stainless Steel'},
+  {dept:'Operating Theatre (OR)', code:'OT-010', name:"Intubation Trolley", material:'Stainless Steel'},
+  {dept:'Operating Theatre (OR)', code:'OT-011', name:"Perforated Trays & Baskets", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-012', name:"Craniotomy Table", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-013', name:"Arm Board", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-014', name:"Arm Board", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-015', name:"Position Suture Trolley", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-016', name:"Operating Stool", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-017', name:"Ether Screen Stand", material:'SS 304'},
+  {dept:'Operating Theatre (OR)', code:'OT-018', name:"Large SS Trolley", material:'Stainless Steel'},
+  {dept:'CSSD & Sterilisation', code:'CSD-001', name:"ETO Steriliser Stand", material:'Stainless Steel'},
+  {dept:'CSSD & Sterilisation', code:'CSD-002', name:"SS Packing Table", material:'Stainless Steel'},
+  {dept:'Cath Lab & Cardiology', code:'CLC-001', name:"Crash Cart \u2014 Cath Lab", material:'SS 304'},
+  {dept:'Cath Lab & Cardiology', code:'CLC-002', name:"Procedure Trolley \u2014 Cath Lab", material:'SS 304'},
+  {dept:'Endoscopy & Scopy', code:'END-001', name:"Scopy Trolley", material:'SS 304'},
+  {dept:'Endoscopy & Scopy', code:'END-002', name:"Endoscopy Trolley", material:'SS 304'},
+  {dept:'Endoscopy & Scopy', code:'END-003', name:"EBUS Trolley", material:'Stainless Steel'},
+  {dept:'Endoscopy & Scopy', code:'END-004', name:"Echo Lab Trolley", material:'Stainless Steel'},
+  {dept:'Pharmacy', code:'PH-001', name:"Pharmacy Racks", material:'Stainless Steel'},
+  {dept:'Pharmacy', code:'PH-002', name:"Bin Racks", material:'SS 304'},
+  {dept:'Pharmacy', code:'PH-003', name:"Instrument / Delivery Trolley", material:'SS 304'},
+  {dept:'Pharmacy', code:'PH-004', name:"Instrument / Delivery Trolley", material:'SS 304'},
+  {dept:'Pharmacy', code:'PH-005', name:"Instrument / Delivery Trolley", material:'Stainless Steel'},
+  {dept:'Pharmacy', code:'PH-006', name:"Plastic Bins", material:'SS 304'},
+  {dept:'Pharmacy', code:'PH-007', name:"Mesh Racks", material:'Stainless Steel'},
+  {dept:'Pharmacy', code:'PH-008', name:"Methanol Storage Cupboard", material:'SS 304'},
+  {dept:'Pharmacy', code:'PH-009', name:"Weld Mesh Rack", material:'SS 304'},
+  {dept:'Pharmacy', code:'PH-010', name:"Metal Rack \u2014 5 Shelves", material:'SS 304'},
+  {dept:'Blood Bank', code:'BB-001', name:"Blood Bank Racks (Freezer)", material:'SS 304'},
+  {dept:'Blood Bank', code:'BB-002', name:"Vacutainer Rack", material:'Stainless Steel'},
+  {dept:'Blood Bank', code:'BB-003', name:"Blood Bag Tray", material:'SS 304'},
+  {dept:'Blood Bank', code:'BB-004', name:"Blood Transfer Cooler Trolley", material:'SS 304'},
+  {dept:'Haematology', code:'HEM-001', name:"Cassette Holder", material:'Stainless Steel'},
+  {dept:'Haematology', code:'HEM-002', name:"SS Racks & Microscope Table", material:'SS 304'},
+  {dept:'Haematology', code:'HEM-003', name:"Centrifuge Table", material:'Stainless Steel'},
+  {dept:'Microbiology', code:'MB-001', name:"Aluminium Trays & Boxes", material:'Aluminium'},
+  {dept:'Microbiology', code:'MB-002', name:"Lab Chairs", material:'SS 304'},
+  {dept:'Microbiology', code:'MB-003', name:"Lab Trolleys", material:'Stainless Steel'},
+  {dept:'Microbiology', code:'MB-004', name:"Coat Stand for Lab", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-001', name:"Revolving Arm Chair", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-002', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-003', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-004', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-005', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-006', name:"Instrument Trolley", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-007', name:"Cylinder Trolleys", material:'Mild Steel'},
+  {dept:'Stem Cell Department', code:'SCD-008', name:"Dressing Trolleys", material:'Stainless Steel'},
+  {dept:'Stem Cell Department', code:'SCD-009', name:"Lab Chair", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-010', name:"Lab Chair", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-011', name:"Lab Chair", material:'SS 304'},
+  {dept:'Stem Cell Department', code:'SCD-012', name:"Dustbin with Trolley", material:'Stainless Steel'},
+  {dept:'Stem Cell Department', code:'SCD-013', name:"SS Chairs", material:'SS 304'},
+  {dept:'Examination Rooms', code:'EXM-001', name:"Examination Table", material:'Mild Steel'},
+  {dept:'Examination Rooms', code:'EXM-002', name:"Examination Table", material:'SS 304'},
+  {dept:'Examination Rooms', code:'EXM-003', name:"Barrigator Stand", material:'SS 304'},
+  {dept:'Laundry & Maintenance', code:'LM-001', name:"Cut-out Trolley", material:'SS 304'},
+  {dept:'Laundry & Maintenance', code:'LM-002', name:"Platform / Tilting Trolley", material:'SS 304'},
+  {dept:'Laundry & Maintenance', code:'LM-003', name:"Bio-Medical Waste Trolley", material:'Aluminium'},
+  {dept:'Laundry & Maintenance', code:'LM-004', name:"CSSD Collection Trolley", material:'Aluminium'},
+  {dept:'Laundry & Maintenance', code:'LM-005', name:"Weld Mesh Trolley", material:'SS 304'},
+  {dept:'Laundry & Maintenance', code:'LM-006', name:"Aluminium Alloy Trolley", material:'Aluminium'},
+  {dept:'MRD & Administration', code:'ADM-001', name:"Perforated Lobby / Waiting Chairs", material:'Stainless Steel'},
+  {dept:'MRD & Administration', code:'ADM-002', name:"Individual Lockers / Cupboards", material:'Stainless Steel'},
+  {dept:'MRD & Administration', code:'ADM-003', name:"Filing Cabinet", material:'Mild Steel'},
+  {dept:'MRD & Administration', code:'ADM-004', name:"Classroom / Seminar Chair", material:'Stainless Steel'},
+  {dept:'MRD & Administration', code:'ADM-005', name:"Roundafile Set", material:'Stainless Steel'},
+  {dept:'MRD & Administration', code:'ADM-006', name:"MS Cupboard with Rack", material:'Mild Steel'}
 ];
 
 const deptCounts = {
@@ -817,11 +925,8 @@ function renderProducts(dept) {
     </div>`).join('');
 }
 
-document.getElementById('deptTabs').addEventListener('click', e => {
-  if (!e.target.classList.contains('dept-tab')) return;
-  document.querySelectorAll('.dept-tab').forEach(t => t.classList.remove('active'));
-  e.target.classList.add('active');
-  renderProducts(e.target.dataset.dept);
+document.getElementById('deptDropdown').addEventListener('change', function() {
+  renderProducts(this.value);
 });
 
 function openModal() {
@@ -854,17 +959,4 @@ if (form) {
       } else {
         btn.textContent = 'Send Enquiry';
         btn.disabled = false;
-        document.getElementById('formNote').textContent = 'Something went wrong. Please try WhatsApp instead.';
-        document.getElementById('formNote').style.color = 'red';
-      }
-    } catch {
-      btn.textContent = 'Send Enquiry';
-      btn.disabled = false;
-    }
-  });
-}
-
-renderProducts('all');
-</script>
-</body>
-</html>
+        document.getElementById('formNote').textContent = 'Something
